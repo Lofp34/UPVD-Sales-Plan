@@ -1,65 +1,85 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { isDatabaseConfigured } from "@/lib/env";
+
+export default function HomePage() {
+  const databaseReady = isDatabaseConfigured();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="editorial-shell soft-grid">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-10 px-6 py-8 md:px-10 lg:px-12">
+        <header className="editorial-card flex flex-col gap-8 overflow-hidden px-6 py-8 md:px-10 md:py-12">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge className="rounded-full bg-primary/10 px-3 py-1 text-primary">
+              Compagnon d&apos;atelier
+            </Badge>
+            <Badge
+              variant="outline"
+              className="rounded-full border-accent/40 bg-accent/10 px-3 py-1 text-accent-foreground"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              UPVD 2026
+            </Badge>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
+            <div className="space-y-5">
+              <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground">
+                Vente startup • demi-journee • support live
+              </p>
+              <h1 className="editorial-title max-w-4xl text-5xl leading-none text-primary sm:text-6xl">
+                Un carnet d&apos;atelier qui avance au rythme de la formation.
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+                Chaque participant construit sa prise de contact, clarifie ses
+                forces, identifie les enjeux client et repart avec un playbook
+                personnel, lisible et printable.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="lg" className="rounded-full px-6">
+                  <Link href="/coach">Acces formateur</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full px-6"
+                >
+                  <a
+                    href="https://github.com/Lofp34/UPVD-Sales-Plan"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Voir le depot GitHub
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <Card className="rounded-[2rem] border-border/70 bg-primary text-primary-foreground shadow-none">
+              <CardHeader className="space-y-3">
+                <CardTitle className="editorial-title text-3xl">
+                  Ce que l&apos;app fait deja
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm leading-7 text-primary-foreground/86">
+                <p>Sessions atelier avec lien participant.</p>
+                <p>Parcours guide, repere slide par slide.</p>
+                <p>Autosave serveur + miroir local.</p>
+                <p>Assistance GPT-5.4 cote serveur uniquement.</p>
+                <p>Playbook final copiable, printable et reprenable.</p>
+                <p className="pt-2 text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
+                  {databaseReady
+                    ? "Base de donnees detectee"
+                    : "Base de donnees a configurer avant usage live"}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </header>
+      </div>
+    </main>
   );
 }
