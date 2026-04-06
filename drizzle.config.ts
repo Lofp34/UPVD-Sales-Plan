@@ -1,8 +1,10 @@
-import "dotenv/config";
-
 import { defineConfig } from "drizzle-kit";
+import { config as loadEnv } from "dotenv";
 
 import { getDatabaseUrl } from "./src/lib/env";
+
+loadEnv({ path: ".env.local", override: false });
+loadEnv({ path: ".env", override: false });
 
 const url =
   getDatabaseUrl() ??
