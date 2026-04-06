@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import type { WorkshopSessionRecord } from "@/lib/db/schema";
+import { readResponsePayload } from "@/lib/http";
 
 type CoachWorkspaceProps = {
   authenticated: boolean;
@@ -53,7 +54,7 @@ export function CoachWorkspace({
         body: JSON.stringify({ accessCode }),
       });
 
-      const payload = await response.json();
+      const payload = await readResponsePayload<{ message?: string }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message ?? "Connexion impossible.");
@@ -86,15 +87,19 @@ export function CoachWorkspace({
         body: JSON.stringify({ title, deckUrl }),
       });
 
-      const payload = await response.json();
+      const payload = await readResponsePayload<{
+        message?: string;
+        joinPath?: string;
+        session?: { title?: string };
+      }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message ?? "Creation de session impossible.");
       }
 
       setCreatedSession({
-        title: payload.session.title as string,
-        joinPath: payload.joinPath as string,
+        title: payload.session?.title ?? title,
+        joinPath: payload.joinPath ?? "",
       });
       setMessage("Session creee. Tu peux maintenant partager le lien.");
     } catch (caughtError) {

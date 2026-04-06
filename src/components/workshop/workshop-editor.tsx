@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { readResponsePayload } from "@/lib/http";
 import { buildFinalPlaybook } from "@/lib/workshop/final-playbook";
 import { WORKSHOP_STEPS } from "@/lib/workshop/step-registry";
 import type {
@@ -199,7 +200,9 @@ export function WorkshopEditor({
           }),
         });
 
-        const payload = await response.json();
+        const payload = await readResponsePayload<{ message?: string }>(
+          response,
+        );
 
         if (!response.ok) {
           throw new Error(payload.message ?? "Sauvegarde impossible.");
@@ -279,7 +282,10 @@ export function WorkshopEditor({
         }),
       });
 
-      const payload = await response.json();
+      const payload = await readResponsePayload<{
+        message?: string;
+        output?: string;
+      }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message ?? "Assistance IA indisponible.");
@@ -290,7 +296,7 @@ export function WorkshopEditor({
         [fieldKey]: {
           loading: false,
           action,
-          output: payload.output as string,
+          output: payload.output ?? "",
         },
       }));
     } catch (caughtError) {

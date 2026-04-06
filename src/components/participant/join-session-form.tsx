@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { readResponsePayload } from "@/lib/http";
 
 type JoinSessionFormProps = {
   slug: string;
@@ -41,13 +42,16 @@ export function JoinSessionForm({
         body: JSON.stringify({ name, startup }),
       });
 
-      const payload = await response.json();
+      const payload = await readResponsePayload<{
+        message?: string;
+        atelierPath?: string;
+      }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message ?? "Impossible de rejoindre la session.");
       }
 
-      window.location.href = payload.atelierPath as string;
+      window.location.href = payload.atelierPath ?? "";
     } catch (caughtError) {
       setError(
         caughtError instanceof Error
